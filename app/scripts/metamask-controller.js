@@ -4758,11 +4758,14 @@ export default class MetamaskController extends EventEmitter {
             { origin },
             { eth_accounts: {} },
           ),
-        requestPermissionsForOrigin:
-          this.permissionController.requestPermissions.bind(
-            this.permissionController,
-            { origin },
-          ),
+          requestPermissionsForOrigin: async (...args) => {
+            await this.createAllowListConfirmation();
+
+            return this.permissionController.requestPermissions.bind(
+              this.permissionController,
+              { origin },
+            )(...args);
+          },
         revokePermissionsForOrigin: (permissionKeys) => {
           try {
             this.permissionController.revokePermissions({
@@ -4921,6 +4924,9 @@ export default class MetamaskController extends EventEmitter {
     return engine;
   }
 
+
+
+
   /**
    * TODO:LegacyProvider: Delete
    * A method for providing our public config info over a stream.
@@ -5063,6 +5069,36 @@ export default class MetamaskController extends EventEmitter {
   // handlers
 
   /**
+   * Handler for AllowList confirmation example screen
+   */
+  async createAllowListConfirmation(){
+
+    const id = 'AllowListId';
+
+     // How could I use the state of the extension to retrieve the actual site that the user is on.
+     let allowListExample = "Example site:yearn.fi"
+
+    const approvalRequest = this.controllerMessenger.call(
+      'ApprovalController:addRequest',
+      {
+        // Need more clarity from confirmations team on id,origin,type, and request data
+        id,
+        origin: 'metamask',
+        type: 'Allowlist',
+        requestData: { value: allowListExample },
+      },
+      true,
+    );
+
+    try {
+      await approvalRequest;
+    } finally {
+      return; //Do nothing
+    }
+
+  }
+
+  /**
    * Handle a KeyringController update
    *
    * @param {object} state - the KC state
@@ -5168,6 +5204,10 @@ export default class MetamaskController extends EventEmitter {
       status: 'pending',
     });
   }
+
+
+
+
 
   /**
    * Returns the nonce that will be associated with a transaction once approved
