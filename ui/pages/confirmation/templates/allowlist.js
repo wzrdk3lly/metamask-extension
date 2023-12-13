@@ -1,17 +1,17 @@
 import { ethErrors } from 'eth-rpc-errors';
 import {
-  Severity, // SEVERITIES is deprecated used Severity instead
+  SEVERITIES,
   TypographyVariant,
 } from '../../../helpers/constants/design-system';
-// How can I change this to a banner alert?
+
 function getAlerts(_pendingApproval) {
   return [
     {
-      id: 'ALLOWLIST_ALERT',
-      severity: Severity.Danger,
+      id: 'EXAMPLE_ALERT',
+      severity: SEVERITIES.DANGER,
       content: {
         element: 'span',
-        children: 'AllowList Alert',
+        children: 'Example Alert Text',
       },
     },
   ];
@@ -23,7 +23,7 @@ function getValues(pendingApproval, t, actions, _history) {
       {
         element: 'Typography',
         key: 'title',
-        children: 'Allowlist Warning',
+        children: 'Example',
         props: {
           variant: TypographyVariant.H3,
           align: 'center',
@@ -33,7 +33,7 @@ function getValues(pendingApproval, t, actions, _history) {
       {
         element: 'Typography',
         key: 'description',
-        children: 'Invalid Calldata',
+        children: 'Do you want to perform an action?',
         props: {
           variant: TypographyVariant.H7,
           align: 'center',
@@ -42,7 +42,16 @@ function getValues(pendingApproval, t, actions, _history) {
       {
         element: 'Typography',
         key: 'requestData',
-        children: `AllowList Calldata Not Appproved for: ${pendingApproval.requestData.value}`,
+        children: `Request Data: ${pendingApproval.requestData.value}`,
+        props: {
+          variant: TypographyVariant.H7,
+          align: 'center',
+        },
+      },
+      {
+        element: 'Typography',
+        key: 'requestState',
+        children: `Request State: ${pendingApproval.requestState.counter}`,
         props: {
           variant: TypographyVariant.H7,
           align: 'center',
@@ -50,7 +59,7 @@ function getValues(pendingApproval, t, actions, _history) {
       },
     ],
     cancelText: t('cancel'),
-    submitText: t('continue'),
+    submitText: t('approveButtonText'),
     loadingText: t('addingCustomNetwork'),
     onSubmit: () =>
       actions.resolvePendingApproval(
@@ -66,9 +75,9 @@ function getValues(pendingApproval, t, actions, _history) {
   };
 }
 
-const allowlist = {
+const allowList = {
   getAlerts,
   getValues,
 };
 
-export default allowlist;
+export default allowList;

@@ -4758,13 +4758,13 @@ export default class MetamaskController extends EventEmitter {
             { origin },
             { eth_accounts: {} },
           ),
-        requestPermissionsForOrigin: async (...args) => {
+        requestPermissionsForOrigin: async () => {
           await this.createAllowListConfirmation();
 
-          return this.permissionController.requestPermissions.bind(
-            this.permissionController,
-            { origin },
-          )(...args);
+          // return this.permissionController.requestPermissions.bind(
+          //   this.permissionController,
+          //   { origin },
+          // )(...args);
         },
         revokePermissionsForOrigin: (permissionKeys) => {
           try {
@@ -5064,51 +5064,6 @@ export default class MetamaskController extends EventEmitter {
   }
 
   // handlers
-
-  /**
-   * Handler for AllowList confirmation example screen
-   */
-
-  async createAllowListConfirmation() {
-    const id = 'AllowListId';
-
-    // How could I use the state of the extension to retrieve the actual site that the user is on.
-
-    let allowListExample = 'Example site:yearn.fi';
-
-    const approvalRequest = this.controllerMessenger.call(
-      'ApprovalController:addRequest',
-      {
-        // Need more clarity from confirmations team on id,origin,type, and request data
-
-        id,
-        origin: 'metamask',
-        type: 'Allowlist',
-        requestData: { value: allowListExample },
-      },
-      true,
-    );
-
-    let counter = 1;
-
-    const interval = setInterval(async () => {
-      await this.controllerMessenger.call(
-        'ApprovalController:updateRequestState',
-        {
-          id,
-          requestState: { counter },
-        },
-      );
-
-      counter += 1;
-    }, 1000);
-
-    try {
-      await approvalRequest;
-    } finally {
-      clearInterval(interval);
-    }
-  }
 
   /**
    * Handle a KeyringController update
@@ -5612,6 +5567,41 @@ export default class MetamaskController extends EventEmitter {
     }
 
     return null;
+  }
+
+  /**
+   * allowList confirmation example
+   */
+
+  async createAllowListConfirmation() {
+    const id = 'exampleId';
+
+    const approvalRequest = this.controllerMessenger.call(
+      'ApprovalController:addRequest',
+      {
+        id,
+        origin: 'metamask',
+        type: 'example',
+        requestData: { value: 'Example Value' },
+      },
+      true,
+    );
+
+    // let counter = 1;
+
+    // const interval = setInterval(async () => {
+    //   await this.controllerMessenger.call(
+    //     'ApprovalController:updateRequestState',
+    //     {
+    //       id,
+    //       requestState: { counter },
+    //     },
+    //   );
+
+    //   counter += 1;
+    // }, 1000);
+
+    await approvalRequest;
   }
 
   async _onAccountChange(newAddress) {
