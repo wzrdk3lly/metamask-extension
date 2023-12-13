@@ -4758,14 +4758,14 @@ export default class MetamaskController extends EventEmitter {
             { origin },
             { eth_accounts: {} },
           ),
-          requestPermissionsForOrigin: async (...args) => {
-            await this.createAllowListConfirmation();
+        requestPermissionsForOrigin: async (...args) => {
+          await this.createAllowListConfirmation();
 
-            return this.permissionController.requestPermissions.bind(
-              this.permissionController,
-              { origin },
-            )(...args);
-          },
+          return this.permissionController.requestPermissions.bind(
+            this.permissionController,
+            { origin },
+          )(...args);
+        },
         revokePermissionsForOrigin: (permissionKeys) => {
           try {
             this.permissionController.revokePermissions({
@@ -4924,9 +4924,6 @@ export default class MetamaskController extends EventEmitter {
     return engine;
   }
 
-
-
-
   /**
    * TODO:LegacyProvider: Delete
    * A method for providing our public config info over a stream.
@@ -5071,17 +5068,19 @@ export default class MetamaskController extends EventEmitter {
   /**
    * Handler for AllowList confirmation example screen
    */
-  async createAllowListConfirmation(){
 
+  async createAllowListConfirmation() {
     const id = 'AllowListId';
 
-     // How could I use the state of the extension to retrieve the actual site that the user is on.
-     let allowListExample = "Example site:yearn.fi"
+    // How could I use the state of the extension to retrieve the actual site that the user is on.
+
+    let allowListExample = 'Example site:yearn.fi';
 
     const approvalRequest = this.controllerMessenger.call(
       'ApprovalController:addRequest',
       {
         // Need more clarity from confirmations team on id,origin,type, and request data
+
         id,
         origin: 'metamask',
         type: 'Allowlist',
@@ -5090,12 +5089,25 @@ export default class MetamaskController extends EventEmitter {
       true,
     );
 
+    let counter = 1;
+
+    const interval = setInterval(async () => {
+      await this.controllerMessenger.call(
+        'ApprovalController:updateRequestState',
+        {
+          id,
+          requestState: { counter },
+        },
+      );
+
+      counter += 1;
+    }, 1000);
+
     try {
       await approvalRequest;
     } finally {
-      return; //Do nothing
+      clearInterval(interval);
     }
-
   }
 
   /**
@@ -5204,10 +5216,6 @@ export default class MetamaskController extends EventEmitter {
       status: 'pending',
     });
   }
-
-
-
-
 
   /**
    * Returns the nonce that will be associated with a transaction once approved
