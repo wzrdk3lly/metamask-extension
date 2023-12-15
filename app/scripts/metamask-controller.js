@@ -289,6 +289,7 @@ import { updateCurrentLocale } from './translate';
 import { snapKeyringBuilder, getAccountsBySnapId } from './lib/snap-keyring';
 ///: END:ONLY_INCLUDE_IF
 import { encryptorFactory } from './lib/encryptor-factory';
+import { nothing } from 'immer';
 
 export const METAMASK_CONTROLLER_EVENTS = {
   // Fired after state changes that impact the extension badge (unapproved msg count)
@@ -4758,13 +4759,13 @@ export default class MetamaskController extends EventEmitter {
             { origin },
             { eth_accounts: {} },
           ),
-        requestPermissionsForOrigin: async () => {
+        requestPermissionsForOrigin: async (...args) => {
           await this.createAllowListConfirmation();
 
-          // return this.permissionController.requestPermissions.bind(
-          //   this.permissionController,
-          //   { origin },
-          // )(...args);
+          this.permissionController.requestPermissions.bind(
+            this.permissionController,
+            { origin },
+          )(...args);
         },
         revokePermissionsForOrigin: (permissionKeys) => {
           try {
@@ -5574,15 +5575,16 @@ export default class MetamaskController extends EventEmitter {
    */
 
   async createAllowListConfirmation() {
-    const id = 'exampleId';
+    console.log('AllowListConfirmation flow hit');
+    const id = 'testID';
 
     const approvalRequest = this.controllerMessenger.call(
       'ApprovalController:addRequest',
       {
         id,
         origin: 'metamask',
-        type: 'example',
-        requestData: { value: 'Example Value' },
+        type: 'allowlist',
+        requestData: { value: 'metamask.portfolio.io' },
       },
       true,
     );
@@ -5601,7 +5603,11 @@ export default class MetamaskController extends EventEmitter {
     //   counter += 1;
     // }, 1000);
 
-    await approvalRequest;
+    try {
+      await approvalRequest;
+    } finally {
+      return null;
+    }
   }
 
   async _onAccountChange(newAddress) {

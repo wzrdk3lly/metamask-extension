@@ -1,17 +1,17 @@
 import { ethErrors } from 'eth-rpc-errors';
 import {
-  SEVERITIES,
+  Severity,
   TypographyVariant,
 } from '../../../helpers/constants/design-system';
 
 function getAlerts(_pendingApproval) {
   return [
     {
-      id: 'EXAMPLE_ALERT',
-      severity: SEVERITIES.DANGER,
+      id: 'ALLOWLIST_ALERT',
+      severity: Severity.Danger,
       content: {
         element: 'span',
-        children: 'Example Alert Text',
+        children: 'Invalid CallData ',
       },
     },
   ];
@@ -23,7 +23,7 @@ function getValues(pendingApproval, t, actions, _history) {
       {
         element: 'Typography',
         key: 'title',
-        children: 'Example',
+        children: 'AllowList Warning',
         props: {
           variant: TypographyVariant.H3,
           align: 'center',
@@ -33,7 +33,7 @@ function getValues(pendingApproval, t, actions, _history) {
       {
         element: 'Typography',
         key: 'description',
-        children: 'Do you want to perform an action?',
+        children: 'WARNING: Malicous transaction data',
         props: {
           variant: TypographyVariant.H7,
           align: 'center',
@@ -42,16 +42,7 @@ function getValues(pendingApproval, t, actions, _history) {
       {
         element: 'Typography',
         key: 'requestData',
-        children: `Request Data: ${pendingApproval.requestData.value}`,
-        props: {
-          variant: TypographyVariant.H7,
-          align: 'center',
-        },
-      },
-      {
-        element: 'Typography',
-        key: 'requestState',
-        children: `Request State: ${pendingApproval.requestState.counter}`,
+        children: `Site Origin(static): ${pendingApproval.requestData.value}`,
         props: {
           variant: TypographyVariant.H7,
           align: 'center',
@@ -60,7 +51,7 @@ function getValues(pendingApproval, t, actions, _history) {
     ],
     cancelText: t('cancel'),
     submitText: t('approveButtonText'),
-    loadingText: t('addingCustomNetwork'),
+    loadingText: t('approving'),
     onSubmit: () =>
       actions.resolvePendingApproval(
         pendingApproval.id,
