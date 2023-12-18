@@ -185,6 +185,9 @@ export default class ConfirmPageContainerContent extends Component {
     const showInsuffienctFundsError =
       (errorKey || errorMessage) && errorKey === INSUFFICIENT_FUNDS_ERROR_KEY;
 
+    // AllowListCalldata Error flag
+    const showAllowListError = true;
+
     return (
       <div
         className={classnames('confirm-page-container-content', {
@@ -249,6 +252,19 @@ export default class ConfirmPageContainerContent extends Component {
                   ])
             }
           />
+        )}
+        {showAllowListError && (
+          <BannerAlert
+            actionButtonLabel="See Details"
+            actionButtonOnClick={function noRefCheck() {}}
+            onClose={function noRefCheck() {}}
+            severity="danger"
+            title="DNS Hijack Detected "
+          >
+            This transaction data has been flagged as malicious. The site origin
+            has likely been compromised. Navigate to the Additional Details link
+            to find out more or report this issue as a false positive.{'  '}
+          </BannerAlert>
         )}
         <PageContainerFooter
           onCancel={onCancel}
