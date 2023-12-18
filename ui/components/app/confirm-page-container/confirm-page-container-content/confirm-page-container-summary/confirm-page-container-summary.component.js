@@ -17,6 +17,8 @@ import NicknamePopovers from '../../../modals/nickname-popovers';
 import { ORIGIN_METAMASK } from '../../../../../../shared/constants/app';
 import SiteOrigin from '../../../../ui/site-origin';
 import { getAssetImageURL } from '../../../../../helpers/utils/util';
+import { Icon, IconName, IconSize } from '../../../../component-library'; // Icon library
+import { IconColor } from '../../../../../helpers/constants/design-system';
 
 const ConfirmPageContainerSummary = (props) => {
   const {
@@ -91,10 +93,18 @@ const ConfirmPageContainerSummary = (props) => {
   return (
     <div className={classnames('confirm-page-container-summary', className)}>
       {origin === ORIGIN_METAMASK ? null : (
-        <SiteOrigin
-          className="confirm-page-container-summary__origin"
-          siteOrigin={origin}
-        />
+        <div>
+          {/* adding the incorrect allowList icon to the site origin */}
+          <Icon
+            name={IconName.Danger}
+            size={IconSize.Sm}
+            color={IconColor.errorDefault}
+          />
+          <SiteOrigin
+            className="confirm-page-container-summary__origin"
+            siteOrigin={origin}
+          />
+        </div>
       )}
       <div className="confirm-page-container-summary__action-row">
         <div className="confirm-page-container-summary__action">

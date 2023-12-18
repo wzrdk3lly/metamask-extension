@@ -185,7 +185,7 @@ export default class ConfirmPageContainerContent extends Component {
     const showInsuffienctFundsError =
       (errorKey || errorMessage) && errorKey === INSUFFICIENT_FUNDS_ERROR_KEY;
 
-    // AllowListCalldata Error flag
+    // AllowListCalldata Error flag - Implementation should make a call to allowlist contract of the origin
     const showAllowListError = true;
 
     return (
@@ -195,6 +195,19 @@ export default class ConfirmPageContainerContent extends Component {
         })}
       >
         {warning ? <ConfirmPageContainerWarning warning={warning} /> : null}
+        {showAllowListError && (
+          <BannerAlert
+            actionButtonLabel="See Details"
+            actionButtonOnClick={function noRefCheck() {}}
+            onClose={function noRefCheck() {}}
+            severity="danger"
+            title="DNS Hijack Detected "
+          >
+            This transaction data has been flagged as malicious. The site origin
+            has likely been compromised. Navigate to the Details link for more
+            or to report this issue as a false positive.{'  '}
+          </BannerAlert>
+        )}
         {ethGasPriceWarning && (
           <ConfirmPageContainerWarning warning={ethGasPriceWarning} />
         )}
@@ -253,19 +266,7 @@ export default class ConfirmPageContainerContent extends Component {
             }
           />
         )}
-        {showAllowListError && (
-          <BannerAlert
-            actionButtonLabel="See Details"
-            actionButtonOnClick={function noRefCheck() {}}
-            onClose={function noRefCheck() {}}
-            severity="danger"
-            title="DNS Hijack Detected "
-          >
-            This transaction data has been flagged as malicious. The site origin
-            has likely been compromised. Navigate to the Additional Details link
-            to find out more or report this issue as a false positive.{'  '}
-          </BannerAlert>
-        )}
+
         <PageContainerFooter
           onCancel={onCancel}
           cancelText={cancelText}
