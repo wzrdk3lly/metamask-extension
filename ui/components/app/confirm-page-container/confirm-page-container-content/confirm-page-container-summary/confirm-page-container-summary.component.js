@@ -95,11 +95,7 @@ const ConfirmPageContainerSummary = (props) => {
       {origin === ORIGIN_METAMASK ? null : (
         <div>
           {/* adding the incorrect allowList icon to the site origin */}
-          <Icon
-            name={IconName.Danger}
-            size={IconSize.Sm}
-            color={IconColor.errorDefault}
-          />
+
           <SiteOrigin
             className="confirm-page-container-summary__origin"
             siteOrigin={origin}

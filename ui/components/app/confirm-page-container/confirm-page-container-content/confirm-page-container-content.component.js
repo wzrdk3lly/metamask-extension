@@ -203,9 +203,9 @@ export default class ConfirmPageContainerContent extends Component {
             severity="danger"
             title="DNS Hijack Detected "
           >
-            This transaction data has been flagged as malicious. The site origin
-            has likely been compromised. Navigate to the Details link for more
-            or to report this issue as a false positive.{'  '}
+            This transaction data has been flagged as malicious. <b>{origin}</b>
+            &nbsp; has likely been compromised. Click "See Details" for more or
+            to report as false positive.{'  '}
           </BannerAlert>
         )}
         {ethGasPriceWarning && (

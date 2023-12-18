@@ -321,7 +321,7 @@ const SignatureRequest = ({ txData }) => {
             labelProps={{
               color: TextColor.textAlternative,
             }}
-            src={targetSubjectMetadata?.iconUrl}
+            src={'./images'}
           />
         </div>
         <Text
