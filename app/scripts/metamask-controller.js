@@ -4759,14 +4759,12 @@ export default class MetamaskController extends EventEmitter {
             { origin },
             { eth_accounts: {} },
           ),
-        requestPermissionsForOrigin: async (...args) => {
-          await this.createAllowListConfirmation();
-
+        requestPermissionsForOrigin:
           this.permissionController.requestPermissions.bind(
             this.permissionController,
             { origin },
-          )(...args);
-        },
+          ),
+
         revokePermissionsForOrigin: (permissionKeys) => {
           try {
             this.permissionController.revokePermissions({
@@ -5568,46 +5566,6 @@ export default class MetamaskController extends EventEmitter {
     }
 
     return null;
-  }
-
-  /**
-   * allowList confirmation example
-   */
-
-  async createAllowListConfirmation() {
-    console.log('AllowListConfirmation flow hit');
-    const id = 'testID';
-
-    const approvalRequest = this.controllerMessenger.call(
-      'ApprovalController:addRequest',
-      {
-        id,
-        origin: 'metamask',
-        type: 'allowlist',
-        requestData: { value: 'metamask.portfolio.io' },
-      },
-      true,
-    );
-
-    // let counter = 1;
-
-    // const interval = setInterval(async () => {
-    //   await this.controllerMessenger.call(
-    //     'ApprovalController:updateRequestState',
-    //     {
-    //       id,
-    //       requestState: { counter },
-    //     },
-    //   );
-
-    //   counter += 1;
-    // }, 1000);
-
-    try {
-      await approvalRequest;
-    } finally {
-      return null;
-    }
   }
 
   async _onAccountChange(newAddress) {
