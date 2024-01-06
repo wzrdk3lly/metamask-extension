@@ -6,11 +6,16 @@
  * Step 2: If yes, check the tx calldata and to field against the allowlist
  * Step 3: If not valid, show warning
  *
+ * node 'node_modules/.bin/jest' './app/scripts/lib/validateTransactionAllowlistOnchain.test.ts' -t 'validation transaction allowlist onchain'
+ *
  * Proposal: https://docs.google.com/document/d/1jUVlXbxHEK1AIP9cgPj_0zP4v_A6eY2HtAk401sBL9I/
  * @returns
  */
 
 import { Contract } from '@ethersproject/contracts';
+import { Web3Provider } from '@ethersproject/providers';
+
+const MAINNET_CHAIN_ID = '0x1';
 
 type Address = string;
 enum ErrorCode {
@@ -31,8 +36,16 @@ export class ValidateTransactionAllowlistOnchain {
   static nullAddress: Address = "0x0000000000000000000000000000000000000000";
 
   #getMainnetRpcProvider() {
+    // const f = metamaskController.findNetworkConfigurationBy({
+    //   chainId: MAINNET_CHAIN_ID,
+    // }),
     //TODO: Grab the value from storage
-    return "https://mainnet.infura.io/v3/0a4455c110734b719d213a2fd1e5667e"
+    return "https://mainnet.infura.io/v3/$token"
+  }
+
+  static formalizeDomain(domain: string): string {
+    const url = new URL(domain);
+    return url.hostname;
   }
 
   /**
@@ -41,10 +54,11 @@ export class ValidateTransactionAllowlistOnchain {
    * @returns         boolean     True if the hostname has configured and registered an allowlist
    */
   async domainHasAllowList(domain: string): Promise<Boolean> {
+    const provider = this.#getMainnetRpcProvider();
     const ethContract = await new Contract(
       ValidateTransactionAllowlistOnchain.registryContractAddress,
       ValidateTransactionAllowlistOnchain.abi,
-      //new Web3Provider(provider),
+      // new Web3Provider(provider),
     );
 
     const owner = await ethContract.allowlistAddressByOriginName(domain);
@@ -76,10 +90,11 @@ export class ValidateTransactionAllowlistOnchain {
       }
     }
 
+    const provider = this.#getMainnetRpcProvider();
     const ethContract = await new Contract(
       ValidateTransactionAllowlistOnchain.registryContractAddress,
       ValidateTransactionAllowlistOnchain.abi,
-      //new Web3Provider(provider),
+      // new Web3Provider(provider),
     );
 
     const valid = await ethContract.validateCalldataByOrigin(originName, targetAddress, callData);
