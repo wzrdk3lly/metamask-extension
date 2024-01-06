@@ -51,6 +51,7 @@ import {
   getMetaMaskIdentities,
   getNetworkIdentifier,
   getSwapsDefaultToken,
+  getMainnetNetwork,
 } from '../../../selectors';
 import useRamps from '../../../hooks/experiences/useRamps';
 ///: BEGIN:ONLY_INCLUDE_IF(build-main,build-beta,build-flask)

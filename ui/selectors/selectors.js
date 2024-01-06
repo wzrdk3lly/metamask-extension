@@ -1474,6 +1474,12 @@ export function getNonTestNetworks(state) {
   ];
 }
 
+export function getMainnetNetwork(state) {
+  const networks = getNonTestNetworks(state);
+
+  return networks.find((network) => network.chainId === CHAIN_IDS.MAINNET)
+}
+
 export function getAllNetworks(state) {
   const networks = [
     // Mainnet and custom networks
